@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Takipçi Stok Durumu</title>
+    <style>
+        /* Modern ve temiz bir görünüm için stil ayarları */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 { color: #333; font-size: 1.5rem; margin-bottom: 1rem; }
+        .stok-kutusu {
+            background: #e8f5e9;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 2px solid #4caf50;
+        }
+        #stok-miktari {
+            display: block;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #2e7d32;
+        }
+        .etiket { color: #666; font-size: 0.9rem; margin-top: 5px; }
+        .loading { font-style: italic; color: #999; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Takipçi Stoğu</h1>
+        <div class="stok-kutusu">
+            <span id="stok-miktari" class="loading">Yükleniyor...</span>
+            <div class="etiket">Adet Mevcut</div>
+        </div>
+    </div>
+
+    <script>
+        // Google Sheets'ten aldığın linki buraya tırnakların içine yapıştır:
+        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaW8jI2Wt3qkwq6vviJpIHgkGG4I37e2qgOaQaasss_-ZHa0qmTTunIAzbHh6h99jHbrpK6yRKUIvP/pub?gid=0&single=true&output=csv';
+
+        async function veriyiGetir() {
+            try {
+                // Veriyi her seferinde taze çekmek için sonuna zaman damgası ekliyoruz
+                const response = await fetch(csvUrl + "?v=" + new Date().getTime());
+                const data = await response.text();
+                
+                // Gelen veriyi ekrana yazdır
+                document.getElementById('stok-miktari').innerText = data.trim();
+                document.getElementById('stok-miktari').classList.remove('loading');
+            } catch (error) {
+                console.error("Hata:", error);
+                document.getElementById('stok-miktari').innerText = "Hata!";
+            }
+        }
+
+        // Sayfa açıldığında çek
+        veriyiGetir();
+        // İstersen 1 dakikada bir otomatik yenilesin:
+        setInterval(veriyiGetir, 60000);
+    </script>
+</body>
+</html>
