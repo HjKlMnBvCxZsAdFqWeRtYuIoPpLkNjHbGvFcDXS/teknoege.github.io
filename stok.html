@@ -2,68 +2,189 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Sistem Tanılama Modu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Kontrol Merkezi | Canlı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        body { font-family: monospace; background: #111; color: #0f0; padding: 20px; line-height: 1.5; }
-        .log-item { margin-bottom: 10px; border-bottom: 1px dotted #333; }
-        .error { color: #ff4757; font-weight: bold; }
-        .success { color: #2ed573; }
-        .info { color: #1e90ff; }
+        :root {
+            --primary: #00f260;
+            --secondary: #0575e6;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #141E30);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
+            color: white;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Ana Kart */
+        .main-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 550px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status-header {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        /* Stok Sayısı */
+        #stok-miktari {
+            font-size: 6.5rem;
+            font-weight: 800;
+            margin: 10px 0;
+            background: linear-gradient(to bottom, #fff 40%, #a8c0ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            letter-spacing: -3px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+        }
+
+        .label {
+            font-size: 1.1rem;
+            opacity: 0.6;
+            margin-bottom: 35px;
+            font-weight: 400;
+        }
+
+        /* Sosyal Medya İkonları */
+        .social-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            width: 55px;
+            height: 55px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* Sosyal Medya Renkleri & Hover */
+        .social-btn:hover { transform: translateY(-8px) scale(1.1); background: rgba(255,255,255,0.1); }
+        .yt:hover { color: #FF0000; border-color: #FF0000; box-shadow: 0 5px 20px rgba(255,0,0,0.3); }
+        .ig:hover { color: #E1306C; border-color: #E1306C; box-shadow: 0 5px 20px rgba(225,48,108,0.3); }
+        .tt:hover { color: #00f2ea; border-color: #ff0050; box-shadow: 0 5px 20px rgba(0,242,234,0.3); }
+        .dc:hover { color: #5865F2; border-color: #5865F2; box-shadow: 0 5px 20px rgba(88,101,242,0.3); }
+        .rb:hover { color: #ffffff; border-color: #ffffff; box-shadow: 0 5px 20px rgba(255,255,255,0.3); }
+
+        .loading { opacity: 0.2; pointer-events: none; }
     </style>
 </head>
 <body>
-    <h2>🚀 Sistem Tanılama Başlatıldı...</h2>
-    <div id="console"></div>
+
+    <div class="main-card">
+        <div class="status-header">
+            <i class="fa-solid fa-circle-dot fa-fade" style="margin-right: 8px;"></i> Canlı Takipçi Havuzu
+        </div>
+        
+        <div id="stok-miktari" class="loading">0</div>
+        <p class="label">Takipçi Stok Durumu</p>
+
+        <div class="social-bar">
+            <a href="#" class="social-btn yt" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            <a href="#" class="social-btn ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn tt" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+            <a href="#" class="social-btn dc" title="Discord"><i class="fa-brands fa-discord"></i></a>
+            <a href="#" class="social-btn rb" title="Roblox"><i class="fa-brands fa-roblox"></i></a>
+        </div>
+    </div>
 
     <script>
-        const logger = document.getElementById('console');
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaW8jI2Wt3qkwq6vviJpIHgkGG4I37e2qgOaQaasss_-ZHa0qmTTunIAzbHh6h99jHbrpK6yRKUIvP/pub?gid=0&single=true&output=csv';
+        
+        let currentStock = 0;
+        const display = document.getElementById('stok-miktari');
 
-        function log(msg, type = 'info') {
-            const div = document.createElement('div');
-            div.className = `log-item ${type}`;
-            div.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
-            logger.appendChild(div);
+        // Sayı artış animasyonu
+        function animateValue(start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const ease = progress * (2 - progress);
+                const val = Math.floor(start + ease * (end - start));
+                display.innerHTML = new Intl.NumberFormat('tr-TR').format(val);
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
         }
 
-        async function testSistemi() {
-            log("1. Adım: Google Sheets bağlantısı deneniyor...");
-            
+        async function updateData() {
             try {
-                const response = await fetch(csvUrl + "&cache=" + Math.random(), {
-                    method: 'GET',
-                    mode: 'cors'
-                });
+                const response = await fetch(csvUrl + "&cache=" + Date.now());
+                const text = await response.text();
+                
+                // Noktalı gelen sayıyı (77.000) temizleyip sayıya çeviriyoruz
+                const cleanNumber = parseInt(text.replace(/\D/g, ''));
 
-                log(`2. Adım: Sunucu yanıt verdi. Durum Kodu: ${response.status}`, response.ok ? 'success' : 'error');
-
-                if (!response.ok) {
-                    log("HATA: Google dosyayı bulamadı veya erişim izni yok (404/403).", "error");
-                    return;
-                }
-
-                const data = await response.text();
-                log("3. Adım: Veri başarıyla indirildi.");
-                log(`4. Adım: Ham Veri İçeriği: <br><pre style="background:#222; padding:10px;">${data}</pre>`);
-
-                if (data.includes("<!DOCTYPE html>")) {
-                    log("KRİTİK HATA: Link sayı yerine bir HTML sayfası döndürüyor! 'Web'de Yayınla' ayarını CSV olarak tekrar yapmalısın.", "error");
-                } else {
-                    const match = data.match(/\d+/);
-                    if (match) {
-                        log(`SONUÇ: Başarılı! Bulunan Sayı: ${match[0]}`, "success");
-                    } else {
-                        log("HATA: Dosya indi ama içinde rakam bulunamadı.", "error");
+                if (!isNaN(cleanNumber)) {
+                    display.classList.remove('loading');
+                    if (cleanNumber !== currentStock) {
+                        animateValue(currentStock, cleanNumber, 1500);
+                        currentStock = cleanNumber;
                     }
                 }
-
-            } catch (err) {
-                log(`KRİTİK HATA: Bağlantı tamamen engellendi! <br>Detay: ${err.message}`, "error");
-                log("Tavsiye: Tarayıcı eklentilerini (AdBlock vb.) kapatıp dene veya Cloudflare üzerinde SSL ayarlarını kontrol et.", "info");
+            } catch (e) {
+                console.error("Veri çekme hatası:", e);
             }
         }
 
-        testSistemi();
+        // İlk çalışma ve her 10 saniyede bir otomatik güncelleme
+        updateData();
+        setInterval(updateData, 10000);
     </script>
 </body>
 </html>
