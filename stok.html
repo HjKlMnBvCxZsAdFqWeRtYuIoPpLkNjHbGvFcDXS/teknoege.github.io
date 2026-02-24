@@ -5,12 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeknoEge Stok Paneli | Canlı</title>
     
+    <link rel="icon" type="image/png" href="https://teknoege.xyz/teknoege.png">
+    
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #00f260; /* Canlı Yeşil */
+            --primary: #FFFFFF;
             --glass: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.15);
         }
@@ -23,7 +25,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Akışkan Gradyan Arka Plan */
             background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #141E30);
             background-size: 400% 400%;
             animation: gradientBG 12s ease infinite;
@@ -37,7 +38,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Glassmorphism Ana Kart */
         .main-card {
             background: var(--glass);
             backdrop-filter: blur(25px);
@@ -62,15 +62,14 @@
             text-transform: uppercase;
             letter-spacing: 5px;
             color: var(--primary);
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             font-weight: 800;
         }
 
-        /* Dev Stok Sayısı */
         #stok-miktari {
-            font-size: 7rem;
+            font-size: 6.5rem;
             font-weight: 800;
-            margin: 10px 0;
+            margin: 5px 0;
             background: linear-gradient(to bottom, #ffffff 40%, #a8c0ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -80,55 +79,69 @@
         }
 
         .label {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.7;
-            margin-bottom: 40px;
-            font-weight: 400;
+            margin-bottom: 25px;
             letter-spacing: 1px;
         }
 
-        /* Sosyal Medya Çubuğu */
+        .info-box {
+            background: rgba(0, 242, 96, 0.05);
+            border: 1px dashed rgba(0, 242, 96, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+            line-height: 1.4;
+        }
+
+        .info-box b { color: var(--primary); }
+
         .social-bar {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             border-top: 1px solid var(--border);
-            padding-top: 35px;
+            padding-top: 30px;
             flex-wrap: wrap;
         }
 
         .social-btn {
             text-decoration: none;
             color: white;
-            font-size: 1.6rem;
-            width: 55px;
-            height: 55px;
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 18px;
+            border-radius: 15px;
             border: 1px solid var(--border);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        /* Roblox Logosu İçin Özel SVG Ayarı */
-        .social-btn svg {
-            width: 26px;
-            height: 26px;
-            fill: currentColor;
+            overflow: hidden;
         }
 
         .social-btn:hover { 
-            transform: translateY(-12px) scale(1.15); 
-            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-10px) scale(1.15); 
+            background: rgba(255, 255, 255, 0.15); 
+        }
+
+        /* Logolu Özel Buton Ayarı */
+        .ege-btn img {
+            width: 28px;
+            height: 28px;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
         }
         
+        /* Renkler */
         .yt:hover { color: #FF0000; border-color: #FF0000; box-shadow: 0 10px 25px rgba(255,0,0,0.4); }
         .ig:hover { color: #E1306C; border-color: #E1306C; box-shadow: 0 10px 25px rgba(225,48,108,0.4); }
-        .tt:hover { color: #ffffff; border-color: #00f2ea; box-shadow: 0 10px 25px rgba(0,242,234,0.4); }
+        .tt:hover { color: #A020F0; border-color: #A020F0; box-shadow: 0 10px 25px rgba(127,0,255,0.4); }
         .dc:hover { color: #5865F2; border-color: #5865F2; box-shadow: 0 10px 25px rgba(88,101,242,0.4); }
-        .rb:hover { color: #ffffff; border-color: #ffffff; box-shadow: 0 10px 25px rgba(255,255,255,0.3); }
+        .rb:hover { color: #007FFF; border-color: #007FFF; box-shadow: 0 10px 25px rgba(0,128,255,0.3); }
+        .ege-btn:hover { border-color: var(--primary); box-shadow: 0 10px 25px rgba(255,255,255,0.3); }
 
         .loading { opacity: 0.15; filter: blur(2px); }
     </style>
@@ -136,35 +149,38 @@
 <body>
 
     <div class="main-card">
-        <div class="status-header">
-            <i class="fa-solid fa-bolt-lightning fa-fade" style="margin-right: 8px;"></i> TEKNOEGE LIVE PANEL
-        </div>
+        <div class="status-header">TEKNOEGE LIVE PANEL</div>
         
         <div id="stok-miktari" class="loading">0</div>
         <p class="label">Takipçi Stok Durumu</p>
 
+        <div class="info-box">
+            <i class="fa-solid fa-circle-info" style="margin-right: 5px; color: var(--primary);"></i>
+            Bir kullanıcıya maksimum <b id="max-limit">...</b> takipçi gönderimi yapılabilir.
+        </div>
+
         <div class="social-bar">
+            <a href="https://teknoege.xyz" target="_blank" class="social-btn ege-btn" title="TeknoEge">
+                <img src="https://teknoege.xyz/teknoege.png" alt="Logo">
+            </a>
+
             <a href="https://www.youtube.com/@teknoege" target="_blank" class="social-btn yt" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
             <a href="https://www.instagram.com/teknoege" target="_blank" class="social-btn ig" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
             <a href="https://www.tiktok.com/@teknoege" target="_blank" class="social-btn tt" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
             <a href="https://discord.com/users/790929210054017035" target="_blank" class="social-btn dc" title="Discord"><i class="fa-brands fa-discord"></i></a>
-            
             <a href="https://www.roblox.com/users/3873628912/profile" target="_blank" class="social-btn rb" title="Roblox">
-                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5.163 0L0 18.837L18.837 24L24 5.163L5.163 0ZM14.965 14.965L9.035 14.965L9.035 9.035L14.965 9.035L14.965 14.965Z"/>
-                </svg>
+                <svg viewBox="0 0 24 24" style="width:24px; height:24px; fill:currentColor;" xmlns="http://www.w3.org/2000/svg"><path d="M5.163 0L0 18.837L18.837 24L24 5.163L5.163 0ZM14.965 14.965L9.035 14.965L9.035 9.035L14.965 9.035L14.965 14.965Z"/></svg>
             </a>
         </div>
     </div>
 
     <script>
-        // Senin Google Sheets CSV Linkin
         const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaW8jI2Wt3qkwq6vviJpIHgkGG4I37e2qgOaQaasss_-ZHa0qmTTunIAzbHh6h99jHbrpK6yRKUIvP/pub?gid=0&single=true&output=csv';
         
         let currentStock = 0;
         const display = document.getElementById('stok-miktari');
+        const limitDisplay = document.getElementById('max-limit');
 
-        // Sayı artışını pürüzsüz yapan fonksiyon
         function animateValue(start, end, duration) {
             let startTimestamp = null;
             const step = (timestamp) => {
@@ -172,39 +188,35 @@
                 const progress = Math.min((timestamp - startTimestamp) / duration, 1);
                 const ease = progress * (2 - progress);
                 const val = Math.floor(start + ease * (end - start));
-                display.innerHTML = new Intl.NumberFormat('tr-TR').format(val);
-                if (progress < 1) {
-                    window.requestAnimationFrame(step);
-                }
+                const formatted = new Intl.NumberFormat('tr-TR').format(val);
+                
+                display.innerHTML = formatted;
+                limitDisplay.innerHTML = formatted; 
+                
+                if (progress < 1) window.requestAnimationFrame(step);
             };
             window.requestAnimationFrame(step);
         }
 
         async function updateData() {
             try {
-                // Linkin sonuna zaman damgası ekleyerek cache sorununu bitiriyoruz
                 const response = await fetch(csvUrl + "&update=" + Date.now());
                 const text = await response.text();
-                
-                // "77.000" gibi gelen verideki rakam dışı her şeyi temizle
                 const cleanNumber = parseInt(text.replace(/\D/g, ''));
 
                 if (!isNaN(cleanNumber)) {
                     display.classList.remove('loading');
-                    // Sadece rakam değiştiyse 2 saniyelik animasyonla güncelle
                     if (cleanNumber !== currentStock) {
                         animateValue(currentStock, cleanNumber, 2000);
                         currentStock = cleanNumber;
                     }
                 }
             } catch (e) {
-                console.error("Veri güncellenemedi:", e);
+                console.error("Veri hatası:", e);
             }
         }
 
-        // İlk açılışta veriyi çek
         updateData();
-        // Her 15 saniyede bir Google Sheets'i gizlice kontrol et
         setInterval(updateData, 15000);
     </script>
 </body>
