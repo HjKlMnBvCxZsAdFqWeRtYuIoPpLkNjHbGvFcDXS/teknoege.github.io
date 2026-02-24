@@ -3,76 +3,204 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Takipçi Stok Durumu</title>
+    <title>Premium Takipçi Stoğu</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <linkcdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
     <style>
-        /* Modern ve temiz bir görünüm için stil ayarları */
+        /* --- UÇUŞ MODU CSS BAŞLANGICI --- */
+        
+        /* Hareketli, canlı arka plan */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
+            margin: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #141E30);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            overflow: hidden;
         }
-        .container {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism (Buzlu Cam) Kart Tasarımı */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 4rem;
             text-align: center;
-            width: 300px;
+            color: #ffffff;
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUpFadeIn 0.8s ease-out forwards;
         }
-        h1 { color: #333; font-size: 1.5rem; margin-bottom: 1rem; }
-        .stok-kutusu {
-            background: #e8f5e9;
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 2px solid #4caf50;
+
+        /* Kartın giriş animasyonu */
+        @keyframes slideUpFadeIn {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
-        #stok-miktari {
-            display: block;
+
+        .card-title {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-weight: 400;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .icon-container {
             font-size: 3rem;
-            font-weight: bold;
-            color: #2e7d32;
+            margin-bottom: 1rem;
+            background: -webkit-linear-gradient(45deg, #00f260, #0575e6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(0, 242, 96, 0.5));
         }
-        .etiket { color: #666; font-size: 0.9rem; margin-top: 5px; }
-        .loading { font-style: italic; color: #999; }
+
+        /* Devasa Stok Rakamı */
+        #stok-miktari {
+            font-size: 6rem;
+            font-weight: 900;
+            margin: 0;
+            /* Rakamın kendisine gradient ve gölge veriyoruz */
+            background: linear-gradient(to right, #ffffff, #a8c0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+            line-height: 1;
+        }
+
+        .status-label {
+            margin-top: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: #00f260;
+            letter-spacing: 1px;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 242, 96, 0.1);
+            border-radius: 50px;
+        }
+
+        /* Yükleniyor animasyonu için */
+        .pulse-anim {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Takipçi Stoğu</h1>
-        <div class="stok-kutusu">
-            <span id="stok-miktari" class="loading">Yükleniyor...</span>
-            <div class="etiket">Adet Mevcut</div>
+    <div class="glass-card">
+        <div class="icon-container">
+            <i class="fa-solid fa-rocket"></i>
         </div>
+        <h1 class="card-title">Anlık Takipçi Stoğu</h1>
+        
+        <div id="stok-miktari" class="pulse-anim">---</div>
+        
+        <div class="status-label">● Canlı Sistem</div>
     </div>
 
+
     <script>
-        // Google Sheets'ten aldığın linki buraya tırnakların içine yapıştır:
-        const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQaW8jI2Wt3qkwq6vviJpIHgkGG4I37e2qgOaQaasss_-ZHa0qmTTunIAzbHh6h99jHbrpK6yRKUIvP/pub?gid=0&single=true&output=csv';
+        // --- JAVASCRIPT MOTORU ---
+
+        // DİKKAT: Aşağıdaki tırnakların içine CSV linkini yapıştır!
+        const csvUrl = 'BURAYA_CSV_LINKINI_YAPISTIR';
+
+        // Mevcut değeri tutacak değişken
+        let currentStockValue = 0;
+        const stockElement = document.getElementById('stok-miktari');
+
+        // Rakamı sayarak artırma animasyonu fonksiyonu
+        function animateValue(start, end, duration) {
+            if (start === end) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                // Easing fonksiyonu (daha yumuşak hareket için)
+                const easeOutQuad = progress * (2 - progress); 
+                let currentValue = Math.floor(start + easeOutQuad * (end - start));
+                
+                // Rakamı binlik basamaklarına ayırarak yaz (Örn: 1.250)
+                stockElement.innerText = new Intl.NumberFormat('tr-TR').format(currentValue);
+                
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    // Animasyon bitince net değeri yaz
+                     stockElement.innerText = new Intl.NumberFormat('tr-TR').format(end);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
 
         async function veriyiGetir() {
             try {
-                // Veriyi her seferinde taze çekmek için sonuna zaman damgası ekliyoruz
+                // Veriyi tazelemek için zaman damgası ekliyoruz
                 const response = await fetch(csvUrl + "?v=" + new Date().getTime());
-                const data = await response.text();
+                const dataText = await response.text();
                 
-                // Gelen veriyi ekrana yazdır
-                document.getElementById('stok-miktari').innerText = data.trim();
-                document.getElementById('stok-miktari').classList.remove('loading');
+                // --- HATA KONTROL MERKEZİ ---
+                // Eğer gelen veri HTML içeriyorsa (senin az önce aldığın hata gibi)
+                if (dataText.includes('<html')) {
+                   throw new Error("Link Hatalı (HTML döndü)");
+                }
+
+                // Gelen veriyi temizle ve sayıya çevir
+                const yeniStokSayisi = parseInt(dataText.trim(), 10);
+
+                 // Eğer gelen şey bir sayı değilse (NaN = Not a Number)
+                if (isNaN(yeniStokSayisi)) {
+                    throw new Error("Veri sayı değil");
+                }
+
+                // --- ANİMASYON TETİKLEME ---
+                // İlk yüklemede pulse animasyonunu durdur
+                stockElement.classList.remove('pulse-anim');
+
+                // Eski değerden yeni değere 1.5 saniyede sayarak git
+                animateValue(currentStockValue, yeniStokSayisi, 1500);
+                
+                // Yeni değeri hafızaya al
+                currentStockValue = yeniStokSayisi;
+
             } catch (error) {
-                console.error("Hata:", error);
-                document.getElementById('stok-miktari').innerText = "Hata!";
+                console.error("Hata Detayı:", error);
+                stockElement.classList.remove('pulse-anim');
+                stockElement.style.fontSize = "2rem"; // Hata mesajı için fontu küçült
+                stockElement.innerText = "Bağlantı Hatası";
+                stockElement.style.color = "#ff4757"; // Hata rengi kırmızı
             }
         }
 
-        // Sayfa açıldığında çek
+        // Sayfa açılınca çalıştır
         veriyiGetir();
-        // İstersen 1 dakikada bir otomatik yenilesin:
-        setInterval(veriyiGetir, 60000);
+        // Her 30 saniyede bir güncelle
+        setInterval(veriyiGetir, 30000);
+
     </script>
 </body>
 </html>
