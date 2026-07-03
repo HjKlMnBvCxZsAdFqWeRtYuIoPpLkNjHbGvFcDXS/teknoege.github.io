@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Verification</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: #1e293b;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            max-width: 400px;
+            width: 90%;
+        }
+        .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #94a3b8;
+            font-size: 15px;
+        }
+        .spinner {
+            border: 4px solid #334155;
+            border-top: 4px solid #38bdf8;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="content">
+        <!-- default content is loading/redirecting -->
+        <div class="spinner"></div>
+        <h1>Redirecting...</h1>
+        <p>Please wait while we transfer you to secure authentication.</p>
+    </div>
+
+    <script>
+        // PASTE YOUR DISCORD GENERATED OAUTH2 URL BELOW
+        const DISCORD_OAUTH_URL = "https://discord.com/oauth2/authorize?client_id=1219647824275308584&response_type=code&redirect_uri=+https%3A%2F%2Fverify.teknoege.workers.dev%2Fcallback&scope=identify+guilds.join";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        const contentDiv = document.getElementById('content');
+
+        if (status === 'success') {
+            // render success screen
+            contentDiv.innerHTML = `
+                <div class="icon">✅</div>
+                <h1>Verified Successfully!</h1>
+                <p>Your account has been verified. You may now close this window and return to Discord.</p>
+            `;
+        } else if (status === 'error') {
+            // render error screen
+            contentDiv.innerHTML = `
+                <div class="icon">❌</div>
+                <h1>Verification Failed</h1>
+                <p>An error occurred while verifying your account. Please try again later.</p>
+            `;
+        } else {
+            // if directly visited, redirect to discord oauth automatically
+            window.location.href = DISCORD_OAUTH_URL;
+        }
+    </script>
+</body>
+</html>
